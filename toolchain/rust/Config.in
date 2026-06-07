@@ -1,0 +1,45 @@
+# Rust toolchain configuration
+
+config RUST_ENABLE
+	bool
+	prompt "Build Rust toolchain" if TOOLCHAINOPTS
+	default n
+	help
+	  Build the Rust compiler and cargo package manager as part of the toolchain.
+	  This enables packages to be built using Rust.
+
+config RUST_VERSION
+	string
+	prompt "Rust version" if RUST_ENABLE
+	default "1.78.0"
+	depends on RUST_ENABLE
+	help
+	  The version of Rust to build and use in the toolchain.
+
+config RUST_ENABLE_DOCUMENTATION
+	bool
+	prompt "Build Rust documentation" if RUST_ENABLE
+	default n
+	depends on RUST_ENABLE
+	help
+	  Include rustdoc and build Rust documentation. This increases build time
+	  and storage requirements significantly.
+
+config RUST_ENABLE_RPATH
+	bool
+	prompt "Enable RPATH in Rust build" if RUST_ENABLE
+	default n
+	depends on RUST_ENABLE
+	help
+	  If enabled, the Rust binaries will use RPATH to locate shared libraries.
+	  This can be useful for standalone toolchains but may cause issues in
+	  some environments.
+
+config RUST_LTO
+	bool
+	prompt "Enable LTO in Rust" if RUST_ENABLE
+	default n
+	depends on RUST_ENABLE
+	help
+	  Enable Link Time Optimization (LTO) for the Rust compiler. This can
+	  improve runtime performance at the cost of longer build times.

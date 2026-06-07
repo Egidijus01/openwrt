@@ -313,6 +313,11 @@ endchoice
 
 source "toolchain/musl/Config.in"
 
+comment "Rust Toolchain"
+	depends on TOOLCHAINOPTS
+
+source "toolchain/rust/Config.in"
+
 comment "Debuggers"
 	depends on TOOLCHAINOPTS
 

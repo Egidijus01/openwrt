@@ -27,7 +27,7 @@
 curdir:=toolchain
 
 # subdirectories to descend into
-$(curdir)/builddirs := $(if $(CONFIG_GDB),gdb) $(if $(CONFIG_EXTERNAL_TOOLCHAIN),wrapper,kernel-headers binutils gcc/initial gcc/final $(LIBC) fortify-headers) $(if $(CONFIG_NASM),nasm) $(if $(CONFIG_USE_MOLD),mold)
+$(curdir)/builddirs := $(if $(CONFIG_GDB),gdb) $(if $(CONFIG_EXTERNAL_TOOLCHAIN),wrapper,kernel-headers binutils gcc/initial gcc/final $(LIBC) fortify-headers) $(if $(CONFIG_NASM),nasm) $(if $(CONFIG_USE_MOLD),mold) $(if $(CONFIG_RUST_ENABLE),rust)
 
 # builddir dependencies
 ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
@@ -44,6 +44,11 @@ ifeq ($(CONFIG_EXTERNAL_TOOLCHAIN),)
 
   $(curdir)/$(LIBC)/compile:=$(curdir)/gcc/initial/compile $(curdir)/kernel-headers/compile
   $(curdir)/gcc/final/compile:=$(curdir)/$(LIBC)/compile
+endif
+
+# Rust depends on GCC being fully built
+ifdef CONFIG_RUST_ENABLE
+  $(curdir)/rust/compile:=$(curdir)/gcc/final/compile
 endif
 
 ifndef DUMP_TARGET_DB
